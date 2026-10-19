@@ -1,16 +1,35 @@
 /**
  * @jest-environment jsdom
  */
+
+/**
+ * @jest-environment jsdom
+ */
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Page from "./page";
 
-it("App Router: Works with dynamic route segments", () => {
-  render(<Page params={{ slug: "Test" }} />);
-  expect(screen.getByRole("heading")).toHaveTextContent("Slug: Test");
+it("App Router: Works with dynamic route segments", async () => {
+  const Component = await Page({
+    params: Promise.resolve({ slug: "Test" }),
+  });
+
+  render(Component);
+
+  expect(screen.getByRole("heading")).toHaveTextContent(
+    "Slug: Test"
+  );
 });
 
-it("PMD should be in the document", () => {
-  render(<Page params={{ slug: "Test" }} />);
-  expect(screen.getByText("This is the post content.")).toBeInTheDocument();
+it("PMD should be in the document", async () => {
+  const Component = await Page({
+    params: Promise.resolve({ slug: "Test" }),
+  });
+
+  render(Component);
+
+  expect(
+    screen.getByText("This is the post content.")
+  ).toBeInTheDocument();
 });
+
